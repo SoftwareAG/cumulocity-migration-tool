@@ -78,14 +78,18 @@ export function getIdPathsFromApplication(application: IApplication): string[][]
 export function getIdPathsFromDashboard(dashboard: IManagedObject): string[][] {
     const isNumberOrString = (key, value) => _.isString(value) || _.isNumber(value);
 
-    return _.uniqBy([
-        ...objectScan(['c8y_Dashboard.**.device.id'], {useArraySelector: false, joined: false, filterFn: isNumberOrString})(dashboard),
-        ...objectScan(['c8y_Dashboard.**.__target.id'], {useArraySelector: false, joined: false, filterFn: isNumberOrString})(dashboard),
-        ...objectScan(['c8y_Dashboard.**.device'], {useArraySelector: false, joined: false, filterFn: isNumberOrString})(dashboard),
-        ...objectScan(['c8y_Dashboard.**.device*id', 'c8y_Dashboard.**.device*Id', 'c8y_Dashboard.**.device*ID'], {useArraySelector: false, joined: false, filterFn: isNumberOrString})(dashboard),
-        ...objectScan(['c8y_Dashboard.**.*binary*id', 'c8y_Dashboard.**.*binary*Id', 'c8y_Dashboard.**.*binary*ID'], {useArraySelector: false, joined: false, filterFn: isNumberOrString})(dashboard),
-        ...objectScan(['c8y_Dashboard.**.*Binary*id', 'c8y_Dashboard.**.*Binary*Id', 'c8y_Dashboard.**.*Binary*ID'], {useArraySelector: false, joined: false, filterFn: isNumberOrString})(dashboard),
-    ], JSON.stringify);
+    return objectScan([
+        'c8y_Dashboard.**.device.id',
+        'c8y_Dashboard.**.__target.id',
+        'c8y_Dashboard.**.device',
+        'c8y_Dashboard.**.device*id', 'c8y_Dashboard.**.device*Id', 'c8y_Dashboard.**.device*ID',
+        'c8y_Dashboard.**.*binary*id', 'c8y_Dashboard.**.*binary*Id', 'c8y_Dashboard.**.*binary*ID',
+        'c8y_Dashboard.**.*Binary*id', 'c8y_Dashboard.**.*Binary*Id', 'c8y_Dashboard.**.*Binary*ID'
+    ], {
+        useArraySelector: false,
+        joined: false,
+        filterFn: isNumberOrString
+    })(dashboard);
 }
 
 export function isSimulatorDevice(device: IManagedObject): boolean {
