@@ -34,7 +34,7 @@
     "@ngx-translate/core": "12.1.1",
     "core-js": "^2.6.2",
     "downloadjs": "^1.4.7",
-    "jszip": "^3.2.1",
+    "jszip": "^3.8.0",
     "lodash": "^4.17.11",
     "object-scan": "^10.0.3",
     "rxjs": "~6.6.3",
