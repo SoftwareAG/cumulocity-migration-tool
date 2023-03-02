@@ -26,6 +26,18 @@ import { HttpDataClient } from "./HttpDataClient";
 import { FileDataClient } from "./FileDataClient";
 import { DataClient } from "./DataClient";
 
+// TODO: Workaround for Cross-Origin Request blocked because of the additional xsrf token
+// @ts-expect-error
+class BasicAuthWithoutXSRFToken extends BasicAuth {
+    getCookieValue(name: string) {
+        if (name === 'XSRF-TOKEN') {
+            return undefined;
+        }
+        // @ts-expect-error
+        return super.getCookieValue(name);
+    }
+}
+
 @Injectable({ providedIn: 'root' })
 export class DataService {
     readonly DEFAULT_FRAGMENTS = [
@@ -61,7 +73,7 @@ export class DataService {
             case 'currentTenant':
                 return this.currentClientDataClient;
             case 'tenant':
-                return new HttpDataClient(new Client(new BasicAuth(connection.credentials), connection.baseUrl), this);
+                return new HttpDataClient(new Client(new BasicAuthWithoutXSRFToken(connection.credentials), connection.baseUrl), this);
             case 'file':
                 return new FileDataClient(connection.file, connection.fileName);
         }
